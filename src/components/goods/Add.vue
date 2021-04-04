@@ -104,73 +104,72 @@ import _ from 'lodash'
 export default {
     data() {
         return {
-            activeIndex:'0',
+            activeIndex: '0',
             // 添加商品的表单数据对象
-            addForm:{
-                goods_name:'',
-                goods_price:0,
-                goods_weight:0,
-                goods_number:0,
+            addForm: {
+                goods_name: '',
+                goods_price: 0,
+                goods_weight: 0,
+                goods_number: 0,
                 // 商品所属的分类数组
-                goods_cat:[],
+                goods_cat: [],
                 // 图片数组
-                pics:[],
+                pics: [],
                 // 商品详情描述
-                goods_introduce:'',
-                attrs:[]
+                goods_introduce: '',
+                attrs: []
             },
             // 添加商品表单的验证对象
-            addFormRules:{
-                goods_name:[
-                    {required:true,message:'请输入商品名称',trigger:'blur'}
+            addFormRules: {
+                goods_name: [
+                    { required: true, message: '请输入商品名称', trigger: 'blur' }
                 ],
-                goods_price:[
-                    {required:true,message:'请输入商品价格',trigger:'blur'}
+                goods_price: [
+                    { required: true, message: '请输入商品价格', trigger: 'blur' }
                 ],
-                goods_weight:[
-                    {required:true,message:'请输入商品重量',trigger:'blur'}
+                goods_weight: [
+                    { required: true, message: '请输入商品重量', trigger: 'blur' }
                 ],
-                goods_number:[
-                    {required:true,message:'请输入商品数量',trigger:'blur'}
+                goods_number: [
+                    { required: true, message: '请输入商品数量', trigger: 'blur' }
                 ],
-                goods_cat:[
-                    {required:true,message:'请选择商品分类',trigger:'blur'}
+                goods_cat: [
+                    { required: true, message: '请选择商品分类', trigger: 'blur' }
                 ]
             },
             // 商品分类数据
-            catelist:[],
-            cateProps:{
-                label:'cat_name',
-                value:'cat_id',
-                children:'children',
+            catelist: [],
+            cateProps: {
+                label: 'cat_name',
+                value: 'cat_id',
+                children: 'children',
                 expandTrigger: 'hover'
             },
             // 动态参数列表数组
-            manyTableData:[],
+            manyTableData: [],
             // 静态属性数据数组
-            onlyTableData:[],
+            onlyTableData: [],
             // 图片upload路径
-            uploadURL:'http://127.0.0.1:8888/api/private/v1/upload',
+            uploadURL: 'http://127.0.0.1:8888/api/private/v1/upload',
             // 图片上传组件的Header请求头
-            headerObj:{
+            headerObj: {
                 Authorization: window.sessionStorage.getItem('token')
             },
             // 预览图片的地址
-            previewPath:'',
+            previewPath: '',
             // 控制图片预览对话框的显示与隐藏
-            previewVisible:false
+            previewVisible: false
         }
     },
     created() {
         this.getCateList()
     },
-    methods:{
+    methods: {
         // 获取所有商品分类数据
         async getCateList() {
+            const { data: res } = await this.$http.get('categories')
 
-            const {data:res} = await this.$http.get('categories')
-
-            if(res.meta.status !== 200) {
+            if (res.meta.status !== 200) {
                 return this.$message.error('获取商品分类数据失败')
             }
 
@@ -184,7 +183,7 @@ export default {
             }
         },
         // 控制Tab切换的时候是否阻止
-        beforeTabLeave(activeName,oldActiveName) {
+        beforeTabLeave(activeName, oldActiveName) {
             if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
                 this.$message.error('请选择商品分类！')
                 return false
@@ -194,24 +193,24 @@ export default {
         async tabClicked() {
             // 当点击动态参数时候的函数
             if (this.activeIndex === '1') {
-                const {data:res} = await this.$http.get(`categories/${this.cateId}/attributes`,{
-                    params:{
-                        sel:'many'
+                const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, {
+                    params: {
+                        sel: 'many'
                     }
                 })
                 if (res.meta.status !== 200) {
                     return this.$message.error('获取动态参数列表失败！')
                 }
                 res.data.forEach(item => {
-                    item.attr_vals = item.attr_vals.length === 0? [] : item.attr_vals.split(' ')
-                });
+                    item.attr_vals = item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
+                })
                 this.manyTableData = res.data
-            } 
+            }
             // 当点击商品属性时候的函数
-            else if(this.activeIndex === '2') {
-                const {data:res} = await this.$http.get(`categories/${this.cateId}/attributes`,{
-                    params:{
-                        sel:'only'
+            else if (this.activeIndex === '2') {
+                const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, {
+                    params: {
+                        sel: 'only'
                     }
                 })
                 if (res.meta.status !== 200) {
@@ -224,18 +223,17 @@ export default {
         handlePreview(file) {
             this.previewPath = file.response.data.url
             this.previewVisible = true
-
         },
         // 处理移除图片的操作
         handleRemove(file) {
             // 获取将要删除图片的临时路径
             const filePath = file.response.data.tmp_path
             // 从pics数组中找到这个临时路径对应的索引
-            const i = this.addForm.pics.findIndex( element => {
+            const i = this.addForm.pics.findIndex(element => {
                 element.pic === filePath
             })
             // 用splice删除Pics的响应数据
-            this.addForm.pics.splice(i,1)
+            this.addForm.pics.splice(i, 1)
         },
         // 处理上传图片成功的操作
         handleSuccess(response) {
@@ -243,7 +241,7 @@ export default {
                 return this.$message.error('上传图片失败！')
             }
             // 拼接得到的图片信息对象，然后push到PICS数组
-            const picInfo = {pic:response.data.tmp_path}
+            const picInfo = { pic: response.data.tmp_path }
             this.addForm.pics.push(picInfo)
         },
         // 添加商品按钮事件
@@ -259,38 +257,35 @@ export default {
                 form.goods_cat = form.goods_cat.join(',')
                 // 处理动态参数和静态属性
                 this.manyTableData.forEach(item => {
-                    const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals.join(' ')}
+                    const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals.join(' ') }
                     this.addForm.attrs.push(newInfo)
                 })
                 this.onlyTableData.forEach(item => {
-                    const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals}
+                    const newInfo = { attr_id: item.attr_id, attr_value: item.attr_vals }
                     this.addForm.attrs.push(newInfo)
                 })
                 form.attrs = this.addForm.attrs
-                console.log(form);
+                console.log(form)
 
                 // 发起请求添加商品
                 // 商品名称必须是唯一的
-                const {data:res} = await this.$http.post('goods',form)
-                console.log(res);
+                const { data: res } = await this.$http.post('goods', form)
+                console.log(res)
                 // if (res.meta.status !== 201) {
                 //     return this.$message.error('添加商品失败！')
                 // }
-                
+
                 this.$message.success('添加成功')
                 this.$router.push('/goods')
             })
-
-            
         }
 
     },
-    computed:{
+    computed: {
         cateId() {
             if (this.addForm.goods_cat.length === 3) {
                 return this.addForm.goods_cat[2]
             }
-            return
         }
     }
 }

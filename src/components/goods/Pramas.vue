@@ -151,7 +151,7 @@
             <el-button @click="editDialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="editParams">确 定</el-button>
         </span>
-        </el-dialog>        
+        </el-dialog>
 
     </div>
 </template>
@@ -160,41 +160,41 @@
 export default {
     data() {
         return {
-            cateList:[],
+            cateList: [],
             // 级联选择框配置对象
-            cateProps:{
-                expandTrigger:"hover",
+            cateProps: {
+                expandTrigger: 'hover',
                 value: 'cat_id',
                 label: 'cat_name',
                 children: 'children'
             },
             // 级联选择框双向绑定的数组
-            selectedCateKeys:[],
+            selectedCateKeys: [],
             // 被激活的页签名称
-            activeName:'many',
+            activeName: 'many',
             // 动态参数数据
-            manyTableData:[],
+            manyTableData: [],
             // 静态属性数据
-            onlyTableData:[],
+            onlyTableData: [],
             // 控制对话框的显示隐藏数据
             addDialogVisible: false,
             // 添加参数的表单数据对象
-            addForm:{
-                attr_name:''
+            addForm: {
+                attr_name: ''
             },
             // 添加参数表单验证规则
-            addFormRules:{
-                attr_name:[{required:true,message:'请输入参数名称',trigger:'blur'}]
+            addFormRules: {
+                attr_name: [{ required: true, message: '请输入参数名称', trigger: 'blur' }]
             },
             // 控制修改对话框的显示与隐藏
-            editDialogVisible:false,
+            editDialogVisible: false,
             // 修改的表单数据对象
-            editForm:{
-                attr_name:''
+            editForm: {
+                attr_name: ''
             },
             // 修改表单验证规则对象
-            editFormRules:{
-                attr_name:[{required:true,message:'请输入参数名称',trigger:'blur'}]
+            editFormRules: {
+                attr_name: [{ required: true, message: '请输入参数名称', trigger: 'blur' }]
             }
         }
     },
@@ -202,10 +202,10 @@ export default {
         // 获取所有商品分类列表
         this.getCateList()
     },
-    methods:{
+    methods: {
         // 获取商品分类列表
         async getCateList() {
-            const {data:res} = await this.$http.get('categories',{type:[3]})
+            const { data: res } = await this.$http.get('categories', { type: [3] })
             if (res.meta.status !== 200) {
                 return this.$message.error('获取商品分类失败！')
             }
@@ -228,10 +228,10 @@ export default {
                 this.onlyTableData = []
                 return
             }
-            
+
             // 选中的是三级分类
             // 根据所选分类id和当前所处的面板获取对应数据
-            const {data:res} = await this.$http.get(`categories/${this.cateId}/attributes`, {params: {sel: this.activeName}})
+            const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes`, { params: { sel: this.activeName } })
 
             if (res.meta.status !== 200) {
                 return this.$$message.error('获取参数列表失败')
@@ -243,11 +243,11 @@ export default {
                 item.inputVisible = false
                 // 控制文本框的数据
                 item.inputValue = ''
-            });
+            })
 
-            console.log(res.data);
-             
-            if(this.activeName === 'many') {
+            console.log(res.data)
+
+            if (this.activeName === 'many') {
                 this.manyTableData = res.data
             } else {
                 this.onlyTableData = res.data
@@ -260,15 +260,15 @@ export default {
         // 点击按钮添加参数
         addParams() {
             // 表单验证
-            this.$refs.addFormRefs.validate( async valid => {
+            this.$refs.addFormRefs.validate(async valid => {
                 if (!valid) {
                     return
                 }
 
-                const {data:res} = await this.$http.post(`categories/${this.cateId}/attributes`,
+                const { data: res } = await this.$http.post(`categories/${this.cateId}/attributes`,
                 {
-                    attr_name:this.addForm.attr_name,
-                    attr_sel:this.activeName
+                    attr_name: this.addForm.attr_name,
+                    attr_sel: this.activeName
                 })
 
                 if (res.meta.status !== 201) {
@@ -284,12 +284,13 @@ export default {
         // 点击按钮展示修改对话框
         async showEditDialog(attr_id) {
             // 查询当前参数信息
-            const {data:res} = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`,
-            {params:{
-                attr_sel:this.activeName
+            const { data: res } = await this.$http.get(`categories/${this.cateId}/attributes/${attr_id}`,
+            {
+params: {
+                attr_sel: this.activeName
             }
             })
-            if(res.meta.status !== 200) {
+            if (res.meta.status !== 200) {
                 return this.$message.error('获取参数信息失败')
             }
             this.editForm = res.data
@@ -297,16 +298,16 @@ export default {
         },
         // 关闭编辑对话框清空认证
         editDialogClosed() {
-            this.$refs.editFormRefs.resetFields();
+            this.$refs.editFormRefs.resetFields()
         },
         // 点击按钮修改参数信息
         async editParams() {
-            this.$refs.editFormRefs.validate(async valid =>{
+            this.$refs.editFormRefs.validate(async valid => {
                 if (!valid) return
-                const {data:res} = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`,
+                const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${this.editForm.attr_id}`,
                 {
-                    attr_name:this.editForm.attr_name,
-                    attr_sel:this.activeName,
+                    attr_name: this.editForm.attr_name,
+                    attr_sel: this.activeName
 
                 }
                 )
@@ -331,20 +332,19 @@ export default {
                 return this.$message.info('已取消删除')
             }
             // 删除
-            const {data:res} = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
+            const { data: res } = await this.$http.delete(`categories/${this.cateId}/attributes/${attr_id}`)
 
-            if(res.meta.status !== 200) {
+            if (res.meta.status !== 200) {
                 return this.$message.error('删除失败')
             }
 
             this.$message.success('删除成功')
             this.getParamsData()
-            
         },
         // 文本框失去焦点或者回车都会触发
         handleInputConfirm(row) {
             // 输入空格的时候自动情况原数据
-            if(row.inputValue.trim().length === 0 ) {
+            if (row.inputValue.trim().length === 0) {
                 row.inputValue = ''
                 row.inputVisible = false
                 return
@@ -355,13 +355,12 @@ export default {
             row.inputVisible = false
             // 发起请求保存此次操作
             this.saveAttrVals(row)
-
         },
         // 将对attr_vals的操作保存到数据库
         async saveAttrVals(row) {
-            const {data:res} = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`,
+            const { data: res } = await this.$http.put(`categories/${this.cateId}/attributes/${row.attr_id}`,
             {
-                attr_name:row.attr_name,
+                attr_name: row.attr_name,
                 attr_sel: row.attr_sel,
                 attr_vals: row.attr_vals.join(' ')
             })
@@ -378,16 +377,16 @@ export default {
             // 让文本框自动获取焦点
             // $nextTick 方法的作用：当页面上元素被重新渲染之后才会执行回调函数中的代码
             this.$nextTick(_ => {
-                this.$refs.saveTagInput.$refs.input.focus();
-            });
+                this.$refs.saveTagInput.$refs.input.focus()
+            })
         },
         // 删除对应的参数和选项
-        handleClose(i,row) {
-            row.attr_vals.splice(i,1)
+        handleClose(i, row) {
+            row.attr_vals.splice(i, 1)
             this.saveAttrVals(row)
         }
     },
-    computed:{
+    computed: {
         // 如果按钮需要被禁用则返回true，否则返回false
         isBtnDisabled() {
             if (this.selectedCateKeys.length !== 3) {

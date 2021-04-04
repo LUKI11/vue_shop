@@ -190,8 +190,6 @@ export default {
         this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
         // 当前分类的等级赋值
         this.addCateForm.cat_level = this.selectedKeys.length
-        
-        return
       } else {
         // 如果没有选择父级分类，则就是第一级分类
         this.addCateForm.cat_pid = 0
@@ -201,12 +199,12 @@ export default {
     // 点击按钮添加新分类
     addCate() {
       // 先认证，认证通过在发起请求
-      this.$refs.addCateFormRef.validate(async valid =>{
+      this.$refs.addCateFormRef.validate(async valid => {
         if (!valid) {
           return
         }
         // 发起添加请求
-        const { data: res} = await this.$http.post('categories', this.addCateForm)
+        const { data: res } = await this.$http.post('categories', this.addCateForm)
 
         if (res.meta.status !== 201) {
           return this.$message.error('添加分类失败!')
@@ -214,13 +212,13 @@ export default {
 
         this.$message.success('添加分类成功')
         this.getCateList()
-        this. addCateDialogVisible = false
+        this.addCateDialogVisible = false
       })
     },
     // 对话框关闭事件,重置表单数据
     addCateDialogClosed() {
       // 这个方法情况表单数据，但是父级分类没有清空
-      this.$refs.addCateFormRef.resetFields();
+      this.$refs.addCateFormRef.resetFields()
       // 把父级表单清空
       this.addCateForm.cat_pid = 0
       this.addCateForm.cat_level = 0

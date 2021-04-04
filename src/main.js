@@ -13,10 +13,12 @@ import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 
-
-
 // 导入字体图标
 import './assets/fonts/iconfont.css'
+
+// 导入全局echarts
+import * as echarts from 'echarts'; //引入echarts
+Vue.prototype.$echarts = echarts //引入组件
 
 import axios from 'axios'
 
@@ -25,8 +27,8 @@ axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
 
 // 需要授权的 API
 axios.interceptors.request.use(config => {
-    config.headers.Authorization = window.sessionStorage.getItem('token');
-    // 最后必须return config
+    config.headers.Authorization = window.sessionStorage.getItem('token')
+        // 最后必须return config
     return config
 })
 Vue.prototype.$http = axios
@@ -35,7 +37,7 @@ Vue.config.productionTip = false
 
 Vue.component('tree-table', ZkTable)
     // 富文本的全局注册
-Vue.use(VueQuillEditor, /* { default global options } */ )
+Vue.use(VueQuillEditor /* { default global options } */ )
 
 // 全局时间处理过滤器
 Vue.filter('dataFormat', function(originVal) {

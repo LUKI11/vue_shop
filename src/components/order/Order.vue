@@ -58,7 +58,7 @@
         </el-card>
 
         <!-- 对话框区域 -->
-        
+
         <!-- 修改地址对话框 -->
         <el-dialog
         title="修改地址"
@@ -100,50 +100,50 @@ import cityData from './citydata'
 export default {
     data () {
         return {
-            queryInfo:{
-                query:'',
-                pagenum:1,
-                pagesize:10
+            queryInfo: {
+                query: '',
+                pagenum: 1,
+                pagesize: 10
             },
-            total:0,
-            orderlist:[],
+            total: 0,
+            orderlist: [],
             // 修改地址的显示与隐藏
             addressVisible: false,
             // 地址表单的数据
-            addressForm:{
-                address1:[],
-                address2:''
+            addressForm: {
+                address1: [],
+                address2: ''
             },
             // 地址表单的验证规则对象
-            addressFormRules:{
-                address1:[
+            addressFormRules: {
+                address1: [
                     { required: true, message: '请选择地址', trigger: 'blur' }
                 ],
-                address2:[
+                address2: [
                     { required: true, message: '请填写详细地址', trigger: 'blur' }
                 ]
             },
             // 当前修改的表单id
-            editId:0,
+            editId: 0,
             // 把导入的城市数据导入到Vue数据里面
-            cityData:cityData,
+            cityData: cityData,
             progressVisible: false,
-            progressInfo:[]
+            progressInfo: []
         }
     },
     created() {
         this.getOrderList()
     },
-    methods:{
+    methods: {
         async getOrderList() {
-            const{data:res} = await this.$http.get('orders',{
+            const { data: res } = await this.$http.get('orders', {
                 params: this.queryInfo
             })
 
             if (res.meta.status !== 200) {
                 return this.$message.error('获取商品列表失败！')
             }
-            console.log(res.data);
+            console.log(res.data)
             this.total = res.data.total
             this.orderlist = res.data.goods
         },
@@ -171,7 +171,6 @@ export default {
             // const { data:res } = await this.$http.get('/kuaidi/1106975712662')
             // this.progressInfo = res.data
             this.progressVisible = true
-
         }
     }
 }

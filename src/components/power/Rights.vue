@@ -31,17 +31,17 @@ export default {
     data() {
         return {
             // 权限列表数据
-            rightsList:[]
+            rightsList: []
         }
     },
     created() {
         // 获取所有权限
         this.getRightsList()
     },
-    methods:{
+    methods: {
         // 获取权限列表
         async getRightsList() {
-            const {data:res} = await this.$http.get('rights/list')
+            const { data: res } = await this.$http.get('rights/list')
             if (res.meta.status !== 200) {
                 return this.$message.error('获取权限列表失败')
             }
@@ -54,4 +54,3 @@ export default {
 <style lang="less" scoped>
 
 </style>
-    

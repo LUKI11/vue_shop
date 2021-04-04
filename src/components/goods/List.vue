@@ -60,23 +60,23 @@ export default {
     data() {
         return {
             // 查询参数对象
-            queryInfo:{
-                query:'',
-                pagenum:1,
-                pagesize:10
+            queryInfo: {
+                query: '',
+                pagenum: 1,
+                pagesize: 10
             },
             // 商品列表
-            goodsList:[],
+            goodsList: [],
             // 商品总量
-            total:0
+            total: 0
         }
     },
     created() {
         this.getGoodsList()
     },
-    methods:{
+    methods: {
         async getGoodsList() {
-            const {data:res} = await this.$http.get('goods',{params:this.queryInfo})
+            const { data: res } = await this.$http.get('goods', { params: this.queryInfo })
 
             if (res.meta.status !== 200) {
                 return this.$message.error('获取商品信息失败！')
@@ -101,13 +101,13 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-                }).catch(err=>err)
+                }).catch(err => err)
 
                 if (confirmResult !== 'confirm') {
                     return this.$message.info('取消删除')
                 }
 
-                const {data:res} = await this.$http.delete(`goods/${id}`)
+                const { data: res } = await this.$http.delete(`goods/${id}`)
 
                 if (res.meta.status !== 200) {
                     return this.$message.error('删除失败')

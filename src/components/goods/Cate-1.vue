@@ -5,7 +5,7 @@
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>商品管理</el-breadcrumb-item>
             <el-breadcrumb-item>商品分类</el-breadcrumb-item>
-        </el-breadcrumb>   
+        </el-breadcrumb>
 
         <!-- 卡片视图区域     -->
         <el-card>
@@ -67,17 +67,17 @@
                     <el-form-item label="分类名称:" prop="cat_name">
                         <el-input v-model="addCateForm.cat_name"></el-input>
                     </el-form-item>
-                        
+
                     <el-form-item label="父级分类:">
                         <!-- option用来指定数据源 -->
                         <!-- props用来配置对象 -->
                         <el-cascader
-                        expand-trigger="hover" 
-                        :options="parentCateList" 
-                        :props="cascaderProps" 
-                        v-model="selectedKeys" 
-                        @change="parentCateChanged" 
-                        clearable 
+                        expand-trigger="hover"
+                        :options="parentCateList"
+                        :props="cascaderProps"
+                        v-model="selectedKeys"
+                        @change="parentCateChanged"
+                        clearable
                         change-on-select
                         ></el-cascader>
                     </el-form-item>
@@ -95,67 +95,67 @@ export default {
     data() {
         return {
             // 查询条件
-            queryInfo:{
-                type:3,
-                pagenum:1,
-                pagesize:5
+            queryInfo: {
+                type: 3,
+                pagenum: 1,
+                pagesize: 5
             },
             // 商品分类数据列表
-            catelist:[],
+            catelist: [],
             // 总数据条数
-            total:0,
+            total: 0,
             // 为table指定列的定义
             columns: [{
-                label:'分类名称',
-                prop:'cat_name'               
-            },{
-                label:'是否有效',
+                label: '分类名称',
+                prop: 'cat_name'
+            }, {
+                label: '是否有效',
                 // 将当前列定义为模板列
-                type:'template',
+                type: 'template',
                 // 当前列使用的模板名称
-                template:'isok'
+                template: 'isok'
 
-            },{
-                label:'排序',
+            }, {
+                label: '排序',
                 // 将当前列定义为模板列
-                type:'template',
+                type: 'template',
                 // 当前列使用的模板名称
-                template:'order'
+                template: 'order'
 
-            },{
-                label:'操作',
+            }, {
+                label: '操作',
                 // 将当前列定义为模板列
-                type:'template',
+                type: 'template',
                 // 当前列使用的模板名称
-                template:'opt'
+                template: 'opt'
             }],
             // 控制添加分类对话框的显示与隐藏
-            addCateDialogVisible:false,
+            addCateDialogVisible: false,
             // 添加分类表单数据
-            addCateForm:{
+            addCateForm: {
                 // 将要添加的分类名称
-                cat_name:'',
+                cat_name: '',
                 // 父级分类id
-                cat_pid:0,
+                cat_pid: 0,
                 // 当前分类等级,默认为一级分类
-                cat_level:0
+                cat_level: 0
             },
             // 添加分类表单认证规则对象
-            addCateFormRules:{
-                cat_name:[
-                    { required: true, message: '请输入分类名称', trigger: 'blur' },
+            addCateFormRules: {
+                cat_name: [
+                    { required: true, message: '请输入分类名称', trigger: 'blur' }
                 ]
             },
             // 父级分类列表
-            parentCateList:[],
+            parentCateList: [],
             // cascader配置对象
-            cascaderProps:{
-                vaule:'cat_id',
-                label:'cat_name',
-                children:'children',
+            cascaderProps: {
+                vaule: 'cat_id',
+                label: 'cat_name',
+                children: 'children'
             },
             // 选中的父级分类的Id数组
-            selectedKeys:[]
+            selectedKeys: []
         }
     },
     created() {
@@ -164,7 +164,7 @@ export default {
     methods: {
         // 获取商品分类数据
         async getCateList() {
-            const {data:res} =await this.$http.get('categories',{params:this.queryInfo})
+            const { data: res } = await this.$http.get('categories', { params: this.queryInfo })
 
             if (res.meta.status !== 200) {
                 return this.$message.error('获取商品分类失败')
@@ -174,7 +174,6 @@ export default {
             this.catelist = res.data.result
             // 为总数据条数赋值
             this.total = res.data.total
-
         },
         // 监听pagesize改变事件
         handleSizeChange(newSize) {
@@ -194,7 +193,6 @@ export default {
         },
         // 获取父级分类列表
         async getParentCateList() {
-
             const { data: res } = await this.$http.get('categories', {
                 params: { type: 2 }
             })
