@@ -65,7 +65,8 @@
     <el-dialog
     title="提示"
     :visible.sync="EditdialogVisible"
-    width="50%">
+    width="50%"
+    @close="EditdialogClosed">
       <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
       <el-form-item label="分类名称" prop="cat_name">
         <el-input v-model="editForm.cat_name"></el-input>
@@ -260,13 +261,20 @@ export default {
       this.EditdialogVisible = true     
     },
     // 发送修改请求事件
-    async editCate() {
-      // 发送修改请求
-      const {data:res} = await this.$http.put('categories/' + this.editForm.cat_id, {cat_name:this.editForm.cat_name})
-      if (res.meta.status !== 200) return this.$message.error('更新分类失败！')
-      this.$message.success('更新分类成功！')
-      this.EditdialogVisible = false
-      this.getCateList()
+    editCate() {
+      this.$refs.editFormRef.validate(async valid => {
+        if (!valid) return
+        // 发送修改请求
+        const {data:res} = await this.$http.put('categories/' + this.editForm.cat_id, {cat_name:this.editForm.cat_name})
+        if (res.meta.status !== 200) return this.$message.error('更新分类失败！')
+        this.$message.success('更新分类成功！')
+        this.EditdialogVisible = false
+        this.getCateList()
+      })    
+    },
+    // 编辑对话框关闭事件
+    EditdialogClosed() {
+      this.$refs.editFormRef.resetFields();
     },
     // 删除分类
     async deleteCate(id) {
