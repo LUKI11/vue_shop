@@ -12,9 +12,9 @@
             <!-- 搜索区域 -->
             <el-row>
                 <el-col :span="8">
-                <el-input placeholder="请输入内容" >
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                </el-input>
+                    <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getOrderList">
+                        <el-button slot="append" icon="el-icon-search" @click="getOrderList"></el-button>
+                    </el-input>
                 </el-col>
             </el-row>
             <!-- 订单列表区域 -->
@@ -82,7 +82,7 @@
             <el-button type="primary" @click="addressVisible = false">确 定</el-button>
         </span>
         </el-dialog>
-        物流进度对话框
+        <!-- 物流进度对话框 -->
         <el-dialog
         title="物流进度"
         :visible.sync="progressVisible"
@@ -90,6 +90,7 @@
         >
         <span>这是一段信息</span>
         </el-dialog>
+
     </div>
 </template>
 
@@ -139,9 +140,8 @@ export default {
             const { data: res } = await this.$http.get('orders', {
                 params: this.queryInfo
             })
-
             if (res.meta.status !== 200) {
-                return this.$message.error('获取商品列表失败！')
+                return this.$message.error('获取订单列表失败！')
             }
             console.log(res.data)
             this.total = res.data.total
