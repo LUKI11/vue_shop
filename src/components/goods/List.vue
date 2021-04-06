@@ -82,16 +82,7 @@ export default {
             // 商品列表
             goodsList: [],
             // 商品总量
-<<<<<<< HEAD
             total: 0
-=======
-            total:0,
-            // 控制编辑对话框显示与隐藏
-            editDialogVisible:false,
-            // 编辑对话框数据对象
-            editForm:{},
-            editFormRules:{}
->>>>>>> goods_list
         }
     },
     created() {
